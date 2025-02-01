@@ -2,18 +2,18 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize)]
 pub struct Sniper {
-    id: i32
+    id: i32,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct PoolInfo {
     pub success: bool,
-    pub data: PoolData
+    pub data: PoolData,
 }
 
 #[derive(Debug, Deserialize)]
 pub struct PoolData {
-    pub data: Vec<Pool>
+    pub data: Vec<Pool>,
 }
 
 impl PoolData {
@@ -40,6 +40,5 @@ pub struct Mint {
     pub address: String,
     pub symbol: String,
     pub name: String,
-    pub decimals: u8
+    pub decimals: u8,
 }
-
