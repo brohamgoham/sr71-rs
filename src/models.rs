@@ -1,11 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-
 #[derive(Serialize, Deserialize)]
 pub struct Sniper {
     id: i32
 }
-
 
 #[derive(Debug, Deserialize)]
 pub struct PoolInfo {
