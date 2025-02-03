@@ -69,8 +69,8 @@ mod tests {
 
     #[tokio::test]
     async fn test_jito_connection() -> Result<()> {
-        let tes = get_inflight().await;
-        println!("test: {:?}", tes);
+        let tes = get_inflight().await?;
+        println!("test: {:?}",tes);
         println!("RUNN");
         Ok(())
     }
