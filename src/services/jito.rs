@@ -23,32 +23,36 @@ fn load_keypair(path: &str) -> Result<Keypair> {
 }
 
 pub async fn run() -> Result<()> {
-    dotenv().ok();
-
     let solana_rpc = RpcClient::new("https://api.mainnet-beta.solana.com".to_string());
-
     let jito = JitoJsonRpcSDK::new("https://ny.mainnet.block-engine.jito.wtf/api/v1", None);
 
     // Load recvr key pair
-    let sender = load_keypair("/path/to/wallet.json")?;
-    let pubkey = sender.pubkey();
-    println!("Pubkey for signer: {}", pubkey);
-
+    // let sender = load_keypair("/path/to/wallet.json")?;
+    // let pubkey = sender.pubkey();
+    // println!("Pubkey for signer: {}", pubkey);
     // Setup recvr and Jito tip acct
-    let recvr = Pubkey::from_str("MY PUB KEY!")?;
+    //let recvr = Pubkey::from_str("MY PUB KEY!")?;
+
     let tip_account = jito.get_random_tip_account().await?;
     let jito_tip_acct = Pubkey::from_str(&tip_account)?;
-
+    println!("Tip Acct: {tip_account}");
+    println!("Jito Tip Acct: {jito_tip_acct}");
     // Define amount to send in lamports
+    //let maint_tx = system_instruction::transfer(&pubkey, &recvr, 1_000);
+    //let jito_tip = system_instruction::transfer(&pubkey, &jito_tip_acct, 1_000);
 
-    let maint_tx = system_instruction::transfer(&pubkey, &recvr, 1_000);
-
-    let jito_tip = system_instruction::transfer(&pubkey, &jito_tip_acct, 1_000);
-
+    match solana_rpc.get_slot().await {
+        Ok(time) => {
+            println!("Match arm Found slot!: {time}")
+        }
+        Err(e) => {
+            eprintln!("No slot captured: {e}")
+        }
+    }
     Ok(())
 }
 
-async fn get_inflight() -> Result<()> {
+pub async fn get_inflight() -> Result<()> {
     let jito = JitoJsonRpcSDK::new("https://ny.mainnet.block-engine.jito.wtf/api/v1", None);
     match jito.get_tip_accounts().await {
         Ok(acct) => {
@@ -59,7 +63,6 @@ async fn get_inflight() -> Result<()> {
             eprintln!("No Tip Accounts!")
         }
     }
-    //let bundles = jito.get_in_flight_bundle_statuses().await;
     Ok(())
 }
 
@@ -70,7 +73,7 @@ mod tests {
     #[tokio::test]
     async fn test_jito_connection() -> Result<()> {
         let tes = get_inflight().await?;
-        println!("test: {:?}",tes);
+        println!("test: {:?}", tes);
         println!("RUNN");
         Ok(())
     }
