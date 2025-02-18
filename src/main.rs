@@ -13,10 +13,6 @@ mod services;
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     dotenv().ok();
-
-   
-    let u = manipulate("Mohammed");
-    println!("String?: {u}");
     let server = Router::new().route("/", get(get_latest_tip));
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3001")
@@ -49,11 +45,6 @@ async fn get_latest_tip() -> axum::Json<()> {
     
     println!("Running process to get latest tip");
     axum::Json(process)
-}
-
-fn manipulate(name: &str) -> String {
-    let s = name.chars().rev().collect::<String>();
-    s
 }
 
 #[cfg(test)]
